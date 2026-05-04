@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Todo List</title>
+  <style>
+    body { font-family: sans-serif; max-width: 500px; margin: 2rem auto; }
+    li { display: flex; align-items: center; gap: 0.5rem; margin: 0.4rem 0; }
+    li.done span { text-decoration: line-through; color: #888; }
+    form { display: inline; }
+  </style>
+</head>
+<body>
+  <h1>Todo List</h1>
+
+  <form action="/add" method="post">
+    <input name="title" placeholder="New todo..." required>
+    <button type="submit">Add</button>
+  </form>
+
+  {% if todos %}
+    <ul>
+      {% for todo in todos %}
+        <li class="{{ 'done' if todo.completed }}">
+          <form action="/toggle/{{ todo.id }}" method="post">
+            <button type="submit">{{ '✓' if todo.completed else '○' }}</button>
+          </form>
+          <span>{{ todo.title }}</span>
+          <form action="/delete/{{ todo.id }}" method="post">
+            <button type="submit">✕</button>
+          </form>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p data-testid="empty-message">No todos yet. Add one above!</p>
+  {% endif %}
+</body>
+</html>
